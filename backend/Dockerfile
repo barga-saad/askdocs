@@ -7,7 +7,7 @@ COPY src src
 RUN mvn -B -ntp -DskipTests package
 
 # Stage 2: a small runtime image with no build tools or source code.
-FROM eclipse-temurin:17-jre-alpine
+FROM eclipse-temurin:25-jre-alpine
 RUN addgroup -S app && adduser -S app -G app
 WORKDIR /app
 COPY --from=build /app/target/*.jar app.jar

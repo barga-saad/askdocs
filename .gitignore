@@ -1,0 +1,14 @@
+# Build output
+target/
+dist/
+node_modules/
+
+# Local secrets
+.env
+
+# Editors and OS
+.idea/
+.vscode/
+*.iml
+.DS_Store
+Thumbs.db

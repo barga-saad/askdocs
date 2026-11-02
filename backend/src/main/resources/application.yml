@@ -1,0 +1,47 @@
+spring:
+  application:
+    name: askdocs
+  datasource:
+    url: ${DB_URL:jdbc:postgresql://localhost:5432/askdocs}
+    username: ${DB_USER:askdocs}
+    password: ${DB_PASSWORD:askdocs}
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 11MB
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,prometheus
+  endpoint:
+    health:
+      probes:
+        enabled: true
+  metrics:
+    tags:
+      application: askdocs
+    # Histogram buckets let Prometheus compute percentiles such as p95.
+    distribution:
+      percentiles-histogram:
+        askdocs.ask.duration: true
+        http.server.requests: true
+
+askdocs:
+  ingestion:
+    chunk-size: 800
+    chunk-overlap: 150
+  search:
+    top-k: 5
+    min-score: ${SEARCH_MIN_SCORE:0.12}
+  ai:
+    # Any OpenAI-compatible server works, for example a local Ollama instance.
+    base-url: ${AI_BASE_URL:http://localhost:11434/v1}
+    api-key: ${AI_API_KEY:}
+    timeout: ${AI_TIMEOUT:PT60S}
+    chat-enabled: ${AI_CHAT_ENABLED:false}
+    chat-model: ${AI_CHAT_MODEL:llama3.2}
+    # "hashing" needs no AI server. "openai" calls the server above.
+    embedding-provider: ${AI_EMBEDDING_PROVIDER:hashing}
+    embedding-model: ${AI_EMBEDDING_MODEL:nomic-embed-text}
